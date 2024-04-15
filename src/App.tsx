@@ -1,6 +1,7 @@
 import './App.css'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Moonphase from "./component/Moonphase.tsx";
+import Description from "./component/Description.tsx";
 
 function App() {
 
@@ -10,7 +11,7 @@ function App() {
 
     //fetch weather data
     function fetchWeatherData() {
-        fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&elements=datetime%2CdatetimeEpoch%2Cname%2Caddress%2Ctempmax%2Ctempmin%2Ctemp%2Chumidity%2Cprecip%2Cprecipprob%2Cpreciptype%2Cwindspeed%2Cuvindex%2Csunrise%2Csunset%2Cmoonphase%2Cconditions%2Cdescription&include=hours%2Ccurrent%2Calerts%2Cevents&key=${weatherAPIKey}&contentType=json`, {
+        fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&elements=datetime%2CdatetimeEpoch%2Cname%2Caddress%2Ctempmax%2Ctempmin%2Ctemp%2Chumidity%2Cprecip%2Cprecipprob%2Cpreciptype%2Cwindspeed%2Cuvindex%2Csunrise%2Csunset%2Cmoonphase%2Cconditions%2Cdescription&include=hours%2Ccurrent%2Calerts%2Cevents&key=${weatherAPIKey}&contentType=json&lang=de`, {
             "method": "GET",
             "headers": {}
         })
@@ -20,6 +21,32 @@ function App() {
                 console.error("Error: ", err);
             });
     }
+
+    useEffect(() => {
+        // Check if geolocation is supported by the browser
+        if ("geolocation" in navigator) {
+            // Prompt user for permission to access their location
+            navigator.geolocation.getCurrentPosition(
+                // Success callback function
+                (position) => {
+                    // Get the user's latitude and longitude coordinates
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+
+                    fetch('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=' + lat + '&longitude=' + lng + '&localityLanguage=de')
+                        .then(response => response.json())
+                        .then(data => setCity(data.city))
+                },
+                // Error callback function
+                (error) => {
+                    // Handle errors, e.g. user denied location sharing permissions
+                    console.error("Error getting user location:", error);
+                }
+            );
+        } else {
+            console.error("Geolocation is not supported by this browser.");
+        }
+    }, []);
 
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         setCity(event.target.value)
@@ -37,6 +64,7 @@ function App() {
                     </div>
                     <h1 className="text-6xl font-bold text-gray-800 mb-4">{weatherData?.currentConditions.temp}</h1>
                     <p className="text-2xl text-gray-600">{weatherData?.currentConditions.conditions}</p>
+                    <Description weatherData={weatherData}/>
                     <div className={"flex justify-between"}>
                         <input onChange={handleChange} onKeyDown={(event) => {
                             if (event.key === "Enter") {
@@ -58,7 +86,7 @@ function App() {
     )
 }
 
-interface WeatherData {
+export interface WeatherData {
     currentConditions: {
         temp: number,
         humidity: number,
@@ -74,8 +102,11 @@ interface WeatherData {
         cloudcover: number,
     }
     days: [
+        {
         tempmax: number,
         tempmin: number,
+        description: string,
+        }
     ]
 }
 

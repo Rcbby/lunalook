@@ -2,19 +2,23 @@ const Moonphase = (props: { moonphase: number | undefined }) => {
     function getMoonPhase() {
         if (props.moonphase !== undefined) {
             if (props.moonphase === 0) {
-                return "🌑";
-            } else if (props.moonphase <= 0.25 && props.moonphase > 0) {
-                return "🌒";
+                return "🌑 Neu Mond";
+            } else if (props.moonphase <= 0.24 && props.moonphase > 0) {
+                return "🌒 Zunehmender Sichelmond";
+            } else if (props.moonphase === 0.25) {
+                return "🌓 Zunehmender Halbmond";
             } else if (props.moonphase < 0.5 && props.moonphase > 0.25) {
-                return "🌔";
+                return "🌔 Zunehmender Dreiviertelmond";
             } else if (props.moonphase === 0.5) {
-                return "🌕";
-            } else if (props.moonphase < 0.75 && props.moonphase > 0.5) {
-                return "🌖";
+                return "🌕 Vollmond";
+            } else if (props.moonphase < 0.74 && props.moonphase > 0.5) {
+                return "🌖 Abnehmender Dreiviertelmond";
+            } else if (props.moonphase === 0.75) {
+                return "🌗 Abnehmender Halbmond";
             } else if (props.moonphase < 1 && props.moonphase > 0.75) {
-                return "🌘";
+                return "🌘 Abnehmender Sichelmond";
             } else if (props.moonphase === 1)
-                return "🌕";
+                return "🌑 Neu Mond";
             else {
                 return "an unexpected error occurred.";
             }
@@ -25,7 +29,7 @@ const Moonphase = (props: { moonphase: number | undefined }) => {
 
     return (
         <>
-            <h1 className={"text-8xl"}>{getMoonPhase()}</h1>
+            <p className={"text-8xl"}>{getMoonPhase()}</p>
         </>
     );
 }
