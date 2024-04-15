@@ -1,6 +1,6 @@
 import './App.css'
 import {useState} from "react";
-import Moonphase from "./component/moonphase.tsx";
+import Moonphase from "./component/Moonphase.tsx";
 
 function App() {
 
