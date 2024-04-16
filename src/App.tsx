@@ -1,7 +1,8 @@
 import './App.css'
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import Moonphase from "./component/Moonphase.tsx";
 import Description from "./component/Description.tsx";
+import Icon from "./component/Icon.tsx";
 
 function App() {
 
@@ -9,9 +10,11 @@ function App() {
     const [weatherData, setWeatherData] = useState<WeatherData>();
     const weatherAPIKey = "G7LNKP4CHGHHJZFTYXQ3XZJQY";
 
+
+    // read the docs from visual Weather API and implement the Recommantion on what to wear, use feelslike and other parameters
     //fetch weather data
     function fetchWeatherData() {
-        fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&elements=datetime%2CdatetimeEpoch%2Cname%2Caddress%2Ctempmax%2Ctempmin%2Ctemp%2Chumidity%2Cprecip%2Cprecipprob%2Cpreciptype%2Cwindspeed%2Cuvindex%2Csunrise%2Csunset%2Cmoonphase%2Cconditions%2Cdescription&include=hours%2Ccurrent%2Calerts%2Cevents&key=${weatherAPIKey}&contentType=json&lang=de`, {
+        fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&iconSet=icons2&elements=datetime%2CdatetimeEpoch%2Cname%2Cfeelslike%2Caddress%2Ctempmax%2Ctempmin%2Ctemp%2Chumidity%2Cprecip%2Cprecipprob%2Cpreciptype%2Cwindspeed%2Cuvindex%2Csunrise%2Csunset%2Cmoonphase%2Cconditions%2Cicon%2Cdescription&include=hours%2Ccurrent%2Cevents&key=${weatherAPIKey}&contentType=json&lang=de`, {
             "method": "GET",
             "headers": {}
         })
@@ -56,15 +59,11 @@ function App() {
         <>
             <div className="flex flex-col items-center justify-center min-h-screen bg-white">
                 <div className="text-center">
-                    <div className={"flex justify-center"}>
-                        <svg height="20.315mm" viewBox="0 0 57.587 57.587" width="20.315mm"
-                             xmlns="http://www.w3.org/2000/svg"><title/>
-                            <circle cx="28.398" cy="28.696" fill="#f5ce42" r="16.948"/>
-                        </svg>
-                    </div>
+                    <Icon />
                     <h1 className="text-6xl font-bold text-gray-800 mb-4">{weatherData?.currentConditions.temp}</h1>
                     <p className="text-2xl text-gray-600">{weatherData?.currentConditions.conditions}</p>
                     <Description weatherData={weatherData}/>
+                    <></>
                     <div className={"flex justify-between"}>
                         <input onChange={handleChange} onKeyDown={(event) => {
                             if (event.key === "Enter") {
@@ -100,6 +99,8 @@ export interface WeatherData {
         datetime: string,
         conditions: string,
         cloudcover: number,
+        icon: string,
+        feelslike: number,
     }
     days: [
         {

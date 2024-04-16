@@ -2,7 +2,9 @@ import {WeatherData} from "../App.tsx";
 
 const Description = (props: { weatherData: WeatherData | undefined}) => {
 
-console.log(props.weatherData?.currentConditions);
+if (props.weatherData !== undefined) {
+    console.log("not undefined")
+}
 
   return (
     <div>
