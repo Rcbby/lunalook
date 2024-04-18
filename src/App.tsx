@@ -85,6 +85,8 @@ function App() {
     )
 }
 
+
+
 export interface WeatherData {
     currentConditions: {
         temp: number,
@@ -112,6 +114,6 @@ export interface WeatherData {
 }
 
 
-type Precib = "rain" | "snow" | "hail"
+type Precib = "rain" | "snow" | "freezingrain" | "ice"
 
 export default App
