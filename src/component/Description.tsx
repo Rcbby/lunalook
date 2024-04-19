@@ -10,7 +10,9 @@ const Description = (props: { weatherData: WeatherData | undefined }) => {
 
             switch (props.weatherData.currentConditions.uvindex) {
                 case 0:
+                    break;
                 case 1:
+                    break;
                 case 2:
                     setUvIndex("Kein Schutz erforderlich.");
                     break;
